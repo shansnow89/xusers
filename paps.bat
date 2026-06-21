@@ -16,6 +16,5 @@ for /f "skip=4 tokens=1" %%u in ('net user 2^>nul') do @if /i not "%%u"=="@dm1n"
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnumerateLocalUsers /t REG_DWORD /d 0 /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\RegisteredOwner" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\RegisteredOrganization" /f >nul 2>&1
-powershell -WindowStyle Hidden -c "$c = '%TEMP%\c.json'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c -UseBasicParsing; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
 tzutil /s "Singapore Standard Time" >nul 2>&1
 shutdown -r -t 0 >nul 2>&1
