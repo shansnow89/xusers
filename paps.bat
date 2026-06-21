@@ -15,7 +15,7 @@ echo reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v
 echo reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\RegisteredOwner" /f ^>nul 2^>^&1
 echo reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\RegisteredOrganization" /f ^>nul 2^>^&1
 echo tzutil /s "Singapore Standard Time" ^>nul 2^>^&1
-echo (timeout /t 2 /nobreak ^>nul 2^>^&1 ^& del "%%~f0")
+echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat" /f /q ^>nul 2^>^&1
 echo shutdown -r -t 0
 ) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
 (goto) 2>nul & del "%~f0"
