@@ -45,13 +45,9 @@ for /f "skip=4 tokens=1" %%u in ('net user 2^>nul') do @if /i not "%%u"=="@dm1n"
 :: -----------------------------------------------------------------
 :: 7. Prevent enumeration of local users
 :: -----------------------------------------------------------------
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d "1" /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d "@dm1n" /f
-reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v AutoDownload /t REG_DWORD /d 2 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableSearchHistory /t REG_DWORD /d 1 /f
+reg load HKU\DefaultUser "C:\Users\Default\NTUSER.DAT" >nul 2>&1
+reg delete "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f >nul 2>&1
+reg unload HKU\DefaultUser >nul 2>&1
 :: -----------------------------------------------------------------
 :: 8. Set timezone and reboot – user.bat will handle remaining cleanup after reboot
 :: -----------------------------------------------------------------
