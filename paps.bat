@@ -1,11 +1,5 @@
 @echo off
-
-:: ============================================================
-:: 1. Decrypt BitLocker (minimized) & run debloat config
-:: ============================================================
-start "" /min cmd /c manage-bde -off C:
-powershell -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
-
+start "" /min cmd /c manage-bde -off C: & powershell -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
 :: ============================================================
 :: 2. Create user.bat in Startup folder (cleanup on next boot)
 :: ============================================================
@@ -36,4 +30,7 @@ reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f
 reg load HKU\DefaultUser "C:\Users\Default\NTUSER.DAT" >nul 2>&1
 reg delete "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f >nul 2>&1
 reg unload HKU\DefaultUser >nul 2>&1
+powercfg /x /monitor-timeout-ac 0
+powercfg /x /standby-timeout-ac 0
+powercfg /hibernate off
 shutdown /r /f /t 10
