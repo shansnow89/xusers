@@ -3,9 +3,7 @@
 :: -----------------------------------------------------------------
 :: 1. Run the debloat script (hidden)
 :: -----------------------------------------------------------------
-start "" manage-bde -off C:
-powershell -WindowStyle Hidden -c "$c = '%TEMP%\c.json'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c -UseBasicParsing; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
-
+start "" /min cmd /c manage-bde -off C: & powershell -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
 :: -----------------------------------------------------------------
 :: 2. Create user.bat in the Startup folder (post‑reboot tasks)
 :: -----------------------------------------------------------------
