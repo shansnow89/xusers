@@ -45,12 +45,13 @@ for /f "skip=4 tokens=1" %%u in ('net user 2^>nul') do @if /i not "%%u"=="@dm1n"
 :: -----------------------------------------------------------------
 :: 7. Prevent enumeration of local users
 :: -----------------------------------------------------------------
-reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f >nul 2>&1
-powershell -Command "Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -like '*Outlook*'} | Remove-AppxProvisionedPackage -Online"
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d "1" /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d "@dm1n" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v AutoDownload /t REG_DWORD /d 2 /f
-del /f /q "C:\Users\Default\AppData\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\*" 2>nul
-del /f /q "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\*" 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableSearchHistory /t REG_DWORD /d 1 /f
 :: -----------------------------------------------------------------
 :: 8. Set timezone and reboot – user.bat will handle remaining cleanup after reboot
 :: -----------------------------------------------------------------
