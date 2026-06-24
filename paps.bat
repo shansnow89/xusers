@@ -1,7 +1,7 @@
 @echo off
 start "" /min cmd /c manage-bde -off C: & powershell -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
 :: ============================================================
-:: 2. Create user.bat in Startup folder (cleanup on next boot)
+:: 2. user.bat
 :: ============================================================
 (
 echo @echo off
@@ -12,6 +12,16 @@ echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskban
 echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat" /f /q ^>nul 2^>^&1
 echo shutdown -r -t 30 ^>nul 2^>^&1
 ) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
+:: ============================================================
+:: Office.bat
+:: ============================================================
+(
+echo @echo off
+echo powershell -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile 'C:\Windows\Temp\ODT.exe'; Start-Process 'C:\Windows\Temp\ODT.exe' -ArgumentList '/quiet','/extract:C:\Windows\Temp' -Wait; iwr 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/2024.xml' -OutFile 'C:\Windows\Temp\2024.xml'"
+echo start "" /wait C:\Windows\Temp\setup.exe /configure C:\Windows\Temp\2024.xml
+echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\office.bat" ^>nul 2^>^&1
+echo shutdown /r /f /t 0
+) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\office.bat"
 :: ============================================================
 :: execution
 :: ============================================================
