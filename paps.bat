@@ -13,18 +13,6 @@ echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
 echo shutdown -r -t 30 ^>nul 2^>^&1
 ) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
 :: ============================================================
-:: office
-:: ============================================================
-(
-echo @echo off
-echo set "TMP=C:\Windows\Temp"
-echo powershell -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile '%%TMP%%\ODT.exe'; Start-Process '%%TMP%%\ODT.exe' -ArgumentList '/quiet','/extract:%%TMP%%' -Wait"
-echo if exist "%%TMP%%\2024.xml" "%%TMP%%\setup.exe" /configure "%%TMP%%\2024.xml"
-echo del "%%TMP%%\ODT.exe" /f /q ^>nul 2^>^&1
-echo timeout /t 5 /nobreak ^>nul
-echo ^(del "%%~f0" /f /q^) ^>nul 2^>^&1
-) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\office.bat"
-:: ============================================================
 :: execution
 :: ============================================================
 powershell -nop -c "$ProgressPreference='SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; $wc=New-Object Net.WebClient; $wc.DownloadFile('https://live.sysinternals.com/PsExec.exe','C:\Windows\System32\PsExec.exe')" >nul 2>&1
