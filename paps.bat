@@ -1,7 +1,7 @@
 @echo off
-start "" /min cmd /c manage-bde -off C: & powershell -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; & ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
+start "" /min cmd /c manage-bde -off C: -Force ^& powershell -NoP -WindowStyle Hidden -ExecutionPolicy Bypass -c "$c = Join-Path $env:TEMP 'c.json'; Invoke-WebRequest 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/config.json' -OutFile $c; ^& ([scriptblock]::Create((irm 'https://debloat.raphi.re/'))) -Config $c -Silent"
 :: ============================================================
-:: 2. user.bat
+:: user.bat
 :: ============================================================
 (
 echo @echo off
