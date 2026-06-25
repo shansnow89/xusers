@@ -26,17 +26,9 @@ echo @echo off
 echo net user @dm1n "IBEX@dm1n!" ^>nul 2^>^&1
 echo powershell -c "Get-LocalGroupMember -Group 'Administrators' | Where-Object { $_.Name -notlike '*@dm1n*' -and $_.Name -notlike '*Administrator*' } | Remove-LocalGroupMember -Group 'Administrators' -ErrorAction SilentlyContinue"
 echo psexec -accepteula -s -i powershell -Command "$exclude=@('Public','Default','@dm1n'); Get-ChildItem 'C:\Users' -Directory | Where-Object {$exclude -notcontains $_.Name} | ForEach-Object {$p=$_.FullName; (Get-WmiObject Win32_UserProfile | Where-Object {$_.LocalPath -eq $p}) | ForEach-Object {$_.Delete()}; Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue}; attrib +h 'C:\Users\Public' 2>$null; tzutil /s 'Singapore Standard Time'; shutdown -r -t 5; Start-Sleep -Seconds 3; Remove-Item -Path $MyInvocation.MyCommand.Path -Force -ErrorAction SilentlyContinue"
+echo powershell -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile 'C:\Windows\Temp\ODT.exe'; Start-Process 'C:\Windows\Temp\ODT.exe' -ArgumentList '/quiet','/extract:C:\Windows\Temp' -Wait; iwr 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/2024.xml' -OutFile 'C:\Windows\Temp\2024.xml'"
+echo start "" /wait C:\Windows\Temp\setup.exe /configure C:\Windows\Temp\2024.xml
 echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f >nul 2>&1
 echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat" /f /q ^>nul 2^>^&1
 ) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
-:: ============================================================
-:: Office.bat
-:: ============================================================
-(
-echo @echo off
-echo powershell -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile 'C:\Windows\Temp\ODT.exe'; Start-Process 'C:\Windows\Temp\ODT.exe' -ArgumentList '/quiet','/extract:C:\Windows\Temp' -Wait; iwr 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/2024.xml' -OutFile 'C:\Windows\Temp\2024.xml'"
-echo start "" /wait C:\Windows\Temp\setup.exe /configure C:\Windows\Temp\2024.xml
-echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\office.bat" ^>nul 2^>^&1
-echo shutdown /r /f /t 0
-) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\office.bat"
 shutdown /r /f /t 30
