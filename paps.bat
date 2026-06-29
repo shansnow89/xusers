@@ -23,11 +23,14 @@ powercfg /hibernate off
 :: ============================================================
 (
 echo @echo off
+echo if not "%%1"=="__hidden__" (start /b "" "%%~f0" __hidden__ ^& exit /b)
 echo net user @dm1n "IBEX@dm1n!" ^>nul 2^>^&1
-echo powershell -NoProfile -Command "$members = Get-LocalGroupMember -Group 'Administrators'; foreach ($m in $members) { if ($m.Name -notlike '*@dm1n*' -and $m.Name -notlike '*Administrator*') { Remove-LocalGroupMember -Group 'Administrators' -Member $m } }"
-echo psexec -accepteula -s -i powershell -Command "$exclude=@('Public','Default','@dm1n'); Get-ChildItem 'C:\Users' -Directory | Where-Object {$exclude -notcontains $_.Name} | ForEach-Object {$p=$_.FullName; $profile=Get-WmiObject Win32_UserProfile | Where-Object {$_.LocalPath -eq $p}; if($profile){$profile.Delete()} else {Write-Host 'No WMI profile found for $p'}; Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue}; $null = attrib +h 'C:\Users\Public'; tzutil /s 'Singapore Standard Time'"
-echo powershell -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile 'C:\Windows\Temp\ODT.exe'; Start-Process 'C:\Windows\Temp\ODT.exe' -ArgumentList '/quiet','/extract:C:\Windows\Temp' -Wait; iwr 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/2024.xml' -OutFile 'C:\Windows\Temp\2024.xml'"
-echo start "" /wait C:\Windows\Temp\setup.exe /configure C:\Windows\Temp\2024.xml
+echo start /b /wait "" powershell -WindowStyle Hidden -NoProfile -Command "$members = Get-LocalGroupMember -Group 'Administrators'; foreach ($m in $members) { if ($m.Name -notlike '*@dm1n*' -and $m.Name -notlike '*Administrator*') { Remove-LocalGroupMember -Group 'Administrators' -Member $m } }"
+echo start /b /wait "" psexec -accepteula -s powershell -WindowStyle Hidden -Command "$exclude=@('Public','Default','@dm1n'); Get-ChildItem 'C:\Users' -Directory | Where-Object {$exclude -notcontains $_.Name} | ForEach-Object {$p=$_.FullName; $profile=Get-WmiObject Win32_UserProfile | Where-Object {$_.LocalPath -eq $p}; if($profile){$profile.Delete()} else {Write-Host 'No WMI profile found for $p'}; Remove-Item $p -Recurse -Force -ErrorAction SilentlyContinue}; $null = attrib +h 'C:\Users\Public'; tzutil /s 'Singapore Standard Time'"
+echo start /b /wait "" powershell -WindowStyle Hidden -NoP -C "iwr 'https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20026-20112.exe' -OutFile 'C:\Windows\Temp\ODT.exe'; Start-Process 'C:\Windows\Temp\ODT.exe' -ArgumentList '/quiet','/extract:C:\Windows\Temp' -Wait; iwr 'https://raw.githubusercontent.com/shansnow89/apps/refs/heads/main/2024.xml' -OutFile 'C:\Windows\Temp\2024.xml'"
+echo start /b /wait "" curl -s -L --retry 5 --retry-delay 2 -o "%%TEMP%%\chrome.msi" https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi ^>nul 2^>^&1
+echo start /b "" msiexec /i "%%TEMP%%\chrome.msi" /quiet /norestart ^>nul 2^>^&1
+echo start /b /wait "" C:\Windows\Temp\setup.exe /configure C:\Windows\Temp\2024.xml ^>nul 2^>^&1
 echo del /f /q "%%APPDATA%%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar*" ^>nul 2^>^&1
 echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" /f ^>nul 2^>^&1
 echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Streams\Desktop" /f ^>nul 2^>^&1
