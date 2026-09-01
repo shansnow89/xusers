@@ -35,5 +35,4 @@ echo reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Streams
 echo del "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat" /f /q ^>nul 2^>^&1
 echo shutdown /r /t 5 /f
 ) > "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\user.bat"
-
 shutdown /r /f /t 30
